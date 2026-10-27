@@ -49,8 +49,8 @@ done
 
 
 
-service ppbd start
-service ppbwd start
+/usr/local/bin/ppbd start
+/usr/local/bin/ppbwd start
 
 # Trap SIGHUP SIGINT SIGTERM
 trap "exit" 1 2 15
