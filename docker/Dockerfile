@@ -1,9 +1,9 @@
-FROM docker.io/library/ubuntu:24.04
+FROM debian:trixie-slim
 
 # installer does not like being run from /
 WORKDIR "/root"
 
-ENV POWERPANEL_VERSION=4101
+ENV POWERPANEL_VERSION=4124
 
 ENV ENABLE_LOGGING=false
 
@@ -26,7 +26,7 @@ RUN apt-get update && \
         usbutils \
         --no-install-recommends && \
     rm -rf /var/lib/apt/lists/* && \
-    curl -s -L 'https://dl4jz3rbrsfum.cloudfront.net/software/PPB_Linux%2064bit_v4.10.1.sh' -o ppb-linux-x86_64.sh && \
+    curl -s -L 'https://www.cyberpower.com/de/de/File/GetFileSampleByType?fileId=SU-20040001-04&fileType=Download%20Center&fileSubType=FileOriginal' -o ppb-linux-x86_64.sh && \
     chmod +x ppb-linux-x86_64.sh && \
     # See https://www.ej-technologies.com/resources/install4j/help/doc/installers/options.html
     ./ppb-linux-x86_64.sh -q -varfile response.varfile && \
@@ -37,9 +37,9 @@ RUN apt-get update && \
 RUN mkdir -p /data
 
 # Prepare first start data - run service ppbd for min 60 seconds to get initial data dirs populated
-RUN service ppbd start && \
+RUN /usr/local/bin/ppbd start && \
     sleep 60 && \
-    service ppbd stop
+    /usr/local/bin/ppbd stop
 
 # Ports: ???, http, https, ???, snmp, snmp
 # See https://dl4jz3rbrsfum.cloudfront.net/documents/CyberPower_UM_PowerPanel-Business-490.pdf
